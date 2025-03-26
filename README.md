@@ -52,3 +52,72 @@ Thank you for your effort and good luck!
 ![Settings](tab2-settings.png)
 Proof that mobile app is buildable using package.json scripts: 
 ![Proof of Build](screenshot-proof-of-build-success.png)
+
+# Mobile Test Engineering Take Home
+
+This is a React Native application with a Wordle-like game implementation. The project includes end-to-end tests using WebdriverIO and Appium.
+
+## Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+- Xcode (for iOS testing)
+- Android Studio (for Android testing)
+- Appium Server
+- iOS Simulator or Android Emulator
+
+## Setup
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+## TEST
+
+### iOS Testing
+
+1. Start the app in iOS simulator:
+   ```bash
+   npm run ios
+   ```
+
+2. In a new terminal, run the iOS tests:
+   ```bash
+   npm run test:ios
+   ```
+
+Watch the test run demonstration in `testvideos/ios_test_run`
+
+### Android Testing
+
+1. Start the app in Android emulator:
+   ```bash
+   npm run android
+   ```
+
+2. In a new terminal, run the Android tests:
+   ```bash
+   npm run test:android
+   ```
+
+Watch the test run demonstration in `testvideos/android_test_run`
+
+## Project Structure
+
+- `app/` - Main application code
+- `e2e/` - End-to-end test files
+  - `config/` - WebdriverIO configuration files
+  - `pages/` - Page object models
+  - `tests/` - Tests
+  - `commands/` - Custom WebdriverIO commands
+- `testvideos/` - Test run demonstrations
+
+## Test Reports
+
+After test execution, Allure reports are generated in the `allure-results` directory. To view the reports:
+
+```bash
+npx allure open
+```
