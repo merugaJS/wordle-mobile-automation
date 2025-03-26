@@ -21,7 +21,7 @@ describe('Wordle Game', () => {
         let correctWord = await wordGamePage.enterCorrectGuessWord(WORDS)
         await expect(wordGamePage.youWinText).toBeDisplayed()
         await expect(wordGamePage.correctWordText).toHaveText(`The word was ${correctWord}`)
-        await expect(wordGamePage.planAgainButton).toBeDisplayed()
+        await expect(wordGamePage.playAgainButton).toBeDisplayed()
     })
 })
 

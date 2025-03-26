@@ -11,14 +11,14 @@ class LoginPage extends Page {
 
     get continueButton() {
         return this.getElement({
-            IOS: '',
+            IOS: 'Continue',
             ANDROID: 'text=Continue'
         })
     }
 
     get closeButton() {
         return this.getElement({
-            IOS: '',
+            IOS: '(//XCUIElementTypeStaticText[@name="mobile-test-eng-take-home"])[1]/following-sibling::*/XCUIElementTypeOther',
             ANDROID: 'new UiSelector().className("com.horcrux.svg.SvgView").instance(0)'
         })
     }
@@ -43,6 +43,13 @@ class LoginPage extends Page {
     }
 
 
+    async waitUntilPageLoads(): Promise<void> {
+        if (await browser.waitForElement(await this.continueButton)) {
+            await this.continueButton.click()
+            await this.closeButton.click()
+        }
+        await super.waitUntilPageLoads()
+    }
     async login(email: string, password: string) {
         await this.emailField.setValue(email)
         await this.passwordField.setValue(password)
@@ -59,10 +66,6 @@ class AndroidLoginPage extends LoginPage {
     async login(email: string, password: string) {
         await this.emailField.setValue(email)
         await this.passwordField.setValue(password)
-        if (await this.continueButton.isDisplayed()) {
-            await this.continueButton.click()
-            await this.closeButton.click()
-        }
         await this.loginButton.click()
         await WordGamePage.waitUntilPageLoads()
         return WordGamePage

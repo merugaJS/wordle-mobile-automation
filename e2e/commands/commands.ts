@@ -4,9 +4,7 @@ declare global {
     namespace WebdriverIO {
         interface Browser {
             typeWithDelay(element: ReturnType<typeof $>, text: string, delay: number): Promise<void>;
-        }
-        interface Element {
-            isPresent(): Promise<boolean>;
+            waitForElement(element: ReturnType<typeof $>, timeout?: number): Promise<boolean>;
         }
     }
 }
@@ -20,9 +18,11 @@ export function registerCommands() {
         }
     });
 
-    browser.addCommand('isPresent', async function (this: WebdriverIO.Element): Promise<boolean> {
+
+    browser.addCommand('waitForElement', async function (element: ReturnType<typeof $>, timeout: number = 10000): Promise<boolean> {
         try {
-            return await this.isExisting();
+            await element.waitForDisplayed({ timeout });
+            return true;
         } catch (error) {
             return false;
         }

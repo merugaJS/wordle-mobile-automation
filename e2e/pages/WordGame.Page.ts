@@ -32,7 +32,7 @@ class WordGamePage extends Page {
         })
     }
 
-    get planAgainButton() {
+    get playAgainButton() {
         return this.getElement({
             IOS: '**/XCUIElementTypeOther[`name == "Play Again"`]',
             ANDROID: 'desc=Play Again'
