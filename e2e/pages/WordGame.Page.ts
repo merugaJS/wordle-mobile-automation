@@ -7,42 +7,42 @@ class WordGamePage extends Page {
     constructor() {
         super({
             IOS: '**/XCUIElementTypeStaticText[`name == "Word Game"`][3]',
-            ANDROID: ''
+            ANDROID: '(//android.widget.TextView[@text="Word Game"])[1]'
         })
     }
 
     get submitButton() {
         return this.getElement({
             IOS: '**/XCUIElementTypeOther[`name == "⏎ Submit"`]',
-            ANDROID: ''
+            ANDROID: 'text=⏎ Submit'
         })
     }
 
     get youWinText() {
         return this.getElement({
             IOS: '**/XCUIElementTypeStaticText[`name == "You Win!"`][2]',
-            ANDROID: ''
+            ANDROID: 'text=You Win!'
         })
     }
 
     get correctWordText() {
         return this.getElement({
             IOS: '**/XCUIElementTypeStaticText[`name CONTAINS "The word was"`][2]',
-            ANDROID: ''
+            ANDROID: '//android.widget.TextView[contains(@text,"The word was")]'
         })
     }
 
     get planAgainButton() {
         return this.getElement({
             IOS: '**/XCUIElementTypeOther[`name == "Play Again"`]',
-            ANDROID: ''
+            ANDROID: 'desc=Play Again'
         })
     }
 
     keyButton(key: string) {
         return this.getElement({
             IOS: `**/XCUIElementTypeOther[\`name == "${key}"\`]`,
-            ANDROID: ''
+            ANDROID: `//android.view.ViewGroup[@content-desc="${key}"]/android.widget.TextView`
         })
     }
 

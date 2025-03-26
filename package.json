@@ -12,7 +12,9 @@
     "build:ios:prod": "eas build -p ios --local",
     "build:android:prod:non-interactive": "eas build -p android --local --non-interactive",
     "build:ios:prod:non-interactive": "eas build -p ios --local --non-interactive",
-    "wdio": "wdio run ./wdio.conf.ts"
+    "wdio": "wdio run ./wdio.conf.ts",
+    "test:ios": "npx wdio ./e2e/config/wdio.ios.config.ts",
+    "test:android": "npx wdio ./e2e/config/wdio.android.config.ts"
   },
   "jest": {
     "preset": "jest-expo"
