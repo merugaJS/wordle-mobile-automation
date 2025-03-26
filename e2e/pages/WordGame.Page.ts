@@ -2,6 +2,7 @@ import Page from "./Page";
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
+import SettingsPage from "./Settings.Page";
 
 class WordGamePage extends Page {
     constructor() {
@@ -38,6 +39,15 @@ class WordGamePage extends Page {
             ANDROID: 'desc=Play Again'
         })
     }
+
+    get settingsButton() {
+        return this.getElement({
+            IOS: '**/XCUIElementTypeButton[`name == "Settings, tab, 2 of 2"`]',
+            ANDROID: 'text=Settings'
+        })
+    }
+
+
 
     keyButton(key: string) {
         return this.getElement({
@@ -136,6 +146,12 @@ class WordGamePage extends Page {
 
             return isValid;
         });
+    }
+
+    async tapSettingsButton(): Promise<typeof SettingsPage> {
+        await this.settingsButton.click();
+        return SettingsPage;
+
     }
 }
 
