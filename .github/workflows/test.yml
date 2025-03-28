@@ -54,15 +54,15 @@ jobs:
           adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done || true
     - name: Create and Boot Android Emulator explicitly
       run: |
-        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "system-images;android-33;google_apis;x86_64"
-        echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd --force --name TestEmulator --abi google_apis/x86_64 --package 'system-images;android-33;google_apis;x86_64'
-        $ANDROID_HOME/emulator/emulator -avd TestEmulator -no-window -no-audio -gpu swiftshader_indirect &
-        $ANDROID_HOME/platform-tools/adb wait-for-device
-        boot_completed=""
-        until [[ "$boot_completed" == "1" ]]; do
-          sleep 5
-          boot_completed=$($ANDROID_HOME/platform-tools/adb shell getprop sys.boot_completed | tr -d '\r')
-          echo "Waiting for emulator boot to complete..."
-        done
-        echo "Emulator booted successfully!"
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "system-images;android-33;google_apis;arm64-v8a"
+          echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd --force --name TestEmulator --abi google_apis/arm64-v8a --package 'system-images;android-33;google_apis;arm64-v8a'
+          $ANDROID_HOME/emulator/emulator -avd TestEmulator -no-window -no-audio -gpu swiftshader_indirect -accel-check &
+          $ANDROID_HOME/platform-tools/adb wait-for-device
+          boot_completed=""
+          until [[ "$boot_completed" == "1" ]]; do
+            sleep 5
+            boot_completed=$($ANDROID_HOME/platform-tools/adb shell getprop sys.boot_completed | tr -d '\r')
+            echo "Waiting for emulator boot to complete..."
+          done
+          echo "Emulator booted successfully!"
     - run: npm run test:android-ci
