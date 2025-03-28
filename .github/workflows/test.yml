@@ -10,9 +10,10 @@ on:
     branches: [ "jyothi" ]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
+  ios-tests:
+    runs-on: macos-latest
+    container:
+      image: sickcodes/docker-osx:latest
 
     strategy:
       matrix:
