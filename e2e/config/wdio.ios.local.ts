@@ -8,6 +8,7 @@ export const config = {
         'appium:deviceName': 'iPhone 15 Pro',
         'appium:automationName': 'XCUITest',
         'appium:bundleId': 'host.exp.Exponent',
+        // 'appium:app': `${process.cwd()}/ios/build/Build/Products/Debug-iphonesimulator/mobiletestengtakehome.app`,
         // Enable this if debugging
         // 'appium:newCommandTimeout': 300
     }],

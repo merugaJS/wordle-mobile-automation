@@ -1,5 +1,6 @@
 import { expect } from '@wdio/globals'
 import ExpoPage from '../pages/Expo.Page'
+import LoginPage from '../pages/Login.Page';
 
 describe('Wordle Game', () => {
     it('should successfully guess the word and display win message', async () => {
@@ -15,9 +16,17 @@ describe('Wordle Game', () => {
             "TIMER",
             "PLANT",
         ];
+
         // Login to app
-        await ExpoPage.waitUntilPageLoads()
-        let loginPage = await ExpoPage.enterUrlManually()
+        let loginPage = LoginPage
+        if (!process.env.CI) {
+            // If running in local when server is running
+            // i.e, when you have "npm run ios" running
+            await ExpoPage.waitUntilPageLoads()
+
+            loginPage = await ExpoPage.enterUrlManually()
+        }
+
         let wordGamePage = await loginPage.login('username', 'password')
 
         // Guess the correct word and submit
