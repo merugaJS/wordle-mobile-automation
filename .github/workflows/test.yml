@@ -12,8 +12,6 @@ on:
 jobs:
   ios-tests:
     runs-on: macos-latest
-    container:
-      image: sickcodes/docker-osx:latest
 
     strategy:
       matrix:
