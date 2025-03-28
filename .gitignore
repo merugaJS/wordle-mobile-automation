@@ -8,6 +8,8 @@ node_modules/
 dist/
 web-build/
 expo-env.d.ts
+ios/
+android/
 
 # Native
 *.orig.*
@@ -34,3 +36,8 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# e2e
+screenshots
+allure-results
+allure-report

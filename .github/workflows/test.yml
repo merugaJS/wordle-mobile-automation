@@ -1,0 +1,60 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "jyothi" ]
+  pull_request:
+    branches: [ "jyothi" ]
+
+jobs:
+  ios-tests:
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm install -g appium && appium driver install xcuitest
+    - run: npx expo prebuild --platform ios
+    - run: xcrun simctl boot "iPhone 15 Pro" || true
+    - run: xcodebuild -workspace ios/mobiletestengtakehome.xcworkspace -scheme mobiletestengtakehome -configuration Release -sdk iphonesimulator -derivedDataPath ios/build
+    - run: npm run test:ios-ci
+
+  android-tests:
+    runs-on:  ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm install -g appium && appium driver install uiautomator2
+    - run: npx expo prebuild --platform android
+    - run: cd android && ./gradlew assembleRelease && cd ..
+    - name: Run Emulator and Tests
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 33
+        target: google_apis
+        arch: x86_64
+        profile: pixel_6
+        disk-size: 4096M 
+        script: npm run test:android-ci
