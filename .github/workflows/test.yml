@@ -1,0 +1,93 @@
+name: Mobile Test Automation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ios-tests:
+    runs-on: macos-latest
+    container:
+      image: sickcodes/docker-osx:latest
+      env:
+        GENERATE_UNIQUE: true
+        CPU: 'Haswell-noTSX'
+        CPUID_FLAGS: 'kvm=on,vendor=GenuineIntel,+invtsc,vmware-cpuid-freq=on'
+        MASTER_PLIST_URL: 'https://raw.githubusercontent.com/sickcodes/osx-serial-generator/master/config-custom-sonoma.plist'
+        SHORTNAME: sonoma
+      options: --device /dev/kvm -p 50922:10022 -v /tmp/.X11-unix:/tmp/.X11-unix -e "DISPLAY=${DISPLAY:-:0.0}"
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm install
+        
+    - name: Start iOS Server
+      run: npm run ios &
+        
+    - name: Wait for Server
+      run: sleep 120
+        
+    - name: Run iOS Tests
+      run: npm run test:ios
+      
+    - name: Upload Allure Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: allure-report
+        path: allure-report/
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./allure-report
+        destination_dir: ios
+
+  android-tests:
+    runs-on: macos-latest
+    container:
+      image: budtmo/docker-android:emulator_11.0
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm install
+        
+    - name: Start Android Server
+      run: npm run android &
+        
+    - name: Wait for Server
+      run: sleep 120
+        
+    - name: Run Android Tests
+      run: npm run test:android
+      
+    - name: Upload Allure Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: allure-report
+        path: allure-report/
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./allure-report
+        destination_dir: android 
